@@ -1,0 +1,30 @@
+{
+  "name": "v-autocomplete-input",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "ByeongKeon Kim",
+    "email": "skysign@gmail.com",
+    "url": "https://github.com/skysign/public"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skysign/v-autocomplete-input_vue3_typescript"
+  },
+  "devDependencies": {
+    "@babel/types": "^7",
+    "@types/node": "^20",
+    "@vitejs/plugin-vue": "^5",
+    "typescript": "^5",
+    "vite": "^5",
+    "vue": "^3",
+    "vue-tsc": "^2"
+  }
+}
