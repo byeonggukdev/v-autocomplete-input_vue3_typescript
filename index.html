@@ -9,8 +9,18 @@
 
   <body>
     <h1>v-autocomplete-input</h1>
-    <script>
-    </script>
+    <div>
+      - v-autocomplete-input features <br />
+      1. Filter items as per input, show only candidated items <br />
+      2. Push ArrowRight to select the item <br />
+      3. Using ← → ↑ ↓ to navigate items
+    </div>
+
+    <br />
+
+    <div>
+      Type any character here.<br />
+    </div>
 
     <table width="200px">
       <tr>
@@ -19,18 +29,30 @@
             data-items='["Anakin Skywalker", "Plo Koon", "Aayla Secura",
             "Ahsoka Tano", "Dooku", "Obi-Wan Kenobi", "Qui-Gon Jinn",
             "Cal Kestis", "Eeth Koth"]'/>
-          <!-- <v-autocomplete-input id="wc_target_release" disabled="false"
-            items="['Anakin Skywalker', 'Plo Koon', 'Aayla Secura',
-              'Ahsoka Tano', 'Dooku', 'Obi-Wan Kenobi', 'Qui-Gon Jinn',
-              'Cal Kestis', 'Eeth Koth']"/> -->
         </td>
       </tr>
     </table>
-    - v-autocomplete-input features <br />
-    1. As user type keyboard, candidated items are shown as suggestion for autocomplete <br />
-    2. ArrowRight is used to select the first candidated item <br />
+
     <br />
-  
+
+    <div>
+      STAR WARS Jedi names below, will be displayed.<br />
+
+      <div>
+        <li>Anakin Skywalker</li>
+        <li>Plo Koon</li>
+        <li>Aayla Secura</li>
+        <li>Ahsoka Tano</li>
+        <li>Dooku</li>
+        <li>Obi-Wan Kenobi</li>
+        <li>Qui-Gon Jinn</li>
+        <li>Cal Kestis</li>
+        <li>Eeth Koth</li>
+      </div>
+      <br />
+      The source of names: https://robinpiree.com/blog/jedi-names
+    </div>
+    
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -10,21 +10,32 @@ const props = withDefaults(defineProps<MyProps>(), {
 })
 const dataItems = ref<string[]>(JSON.parse(props.dataItems))
 const candidatedItems = ref<string[]>([])
+const savedItems = ref<string[]>([])
 const candidatedIndex = ref<number>(0)
 
 const disabled = (useAttrs().disabled === 'true')? ref(true): ref(false);
 const typing = ref('')
 const focus = ref<boolean>(false)
 
-
+let prevIndex: number = 0
 let prevTyping: string = ''
 
 watch(typing, (typed, prevTyped) => {
-  filterCandidatedItems(typed)
+  console.log('begin watch')
+
+  if (typed.length > 0) 
+    filterCandidatedItems(typed)
+  else
+    candidatedItems.value = []
+
   prevTyping = prevTyped
+  console.log('end watch')
 })
 
 function filterCandidatedItems(typed: string) {
+  console.log('typed')
+  console.log(typed)
+  
   const target = typed.toLowerCase()
 
   if (focus.value) {
@@ -51,21 +62,13 @@ function focusIn() {
   // Keep the cursor at the end of input value
   typing.value = typing.value
   console.log('focusin')
-  filterCandidatedItems(typing.value)
+  // filterCandidatedItems(typing.value)
 }
 
 function focusOut() {
   focus.value = false
   console.log('focusOut')
-  filterCandidatedItems(typing.value)
-}
-
-function keyRight() {
-  if (candidatedItems.value.length > 0) {
-    typing.value = candidatedItems.value[0]
-  }
-
-  console.log('keyRight')
+  candidatedItems.value = []
 }
 
 // e.key
@@ -80,21 +83,36 @@ interface processKeyboardEvent {
 }
 
 let prevKey: string = ''
-let prevIndex: number = 0
 
 const processArrowLeft: processKeyboardEvent = function(e: KeyboardEvent): void {
   // && prevTyping != ''
   if (prevKey == 'ArrowRight' ) {
+    const savedTyping: string = typing.value
+    console.log('savedTyping')
+    console.log(savedTyping)
+
+    // console.log('length')
+    // console.log(candidatedItems.value.length)
     typing.value = prevTyping
+    // console.log('length')
+    // console.log(candidatedItems.value.length)
+
+    // const idx = candidatedItems.value.indexOf(savedTyping)
+    // console.log('idx')
+    // console.log(idx)
+    // candidatedIndex.value = idx < 0 ? 0: idx
+
     candidatedIndex.value = prevIndex
   }
 }
 
 const processArrowRight: processKeyboardEvent = function(e: KeyboardEvent): void {
-  if (candidatedItems.value.length > 0) {
+  if (prevKey != 'ArrowRight' && candidatedItems.value.length > 0) {
     prevTyping = typing.value
-    prevIndex = candidatedIndex.value
     typing.value = candidatedItems.value[candidatedIndex.value]
+    prevIndex = candidatedIndex.value
+
+    candidatedIndex.value = 0
   }
 }
 
@@ -107,6 +125,13 @@ const processArrowDown: processKeyboardEvent = function(e: KeyboardEvent): void 
 }
 
 const processEnter: processKeyboardEvent = function(e: KeyboardEvent): void {
+  const item: string = typing.value
+  typing.value = ''
+
+  if (!savedItems.value.includes(item))
+    savedItems.value.push(item)
+
+    candidatedItems.value = []
 }
 
 
@@ -121,15 +146,21 @@ let processFunctions: any = {
 const ArrowsAndEnter = [ 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter' ]
 
 function keyupKeyboardEventListener(e: KeyboardEvent) {
-  console.log('e.key')
+  console.log('begin e.key')
   console.log(e.key)
 
   if (ArrowsAndEnter.includes(e.key)) {
-    prevIndex = candidatedIndex.value
-
     processFunctions[e.key](e)
     prevKey = e.key
   }
+
+  console.log('end e.key')
+}
+
+function clickToRemove(item: string) {
+  console.log('begin clickToRemove')
+  savedItems.value = savedItems.value.filter((v) => {return v != item} )
+  console.log('end clickToRemove')
 }
 </script>
 
@@ -140,6 +171,10 @@ function keyupKeyboardEventListener(e: KeyboardEvent) {
     @focusin="focusIn" @focusout="focusOut"/>
   <div>
     <li @click="clickCandidatedItems(index)" v-for="(item, index) in candidatedItems"><div v-if="index == candidatedIndex">X</div>{{item}}</li>
+  </div>
+  <div v-for="item in savedItems">
+    {{ item }}
+    <button type="button" @click="clickToRemove(item)" :disabled="disabled">X</button>
   </div>
 </div>
 </template>
